@@ -1,4 +1,4 @@
-#  ElectroniX  – Smart & Responsible Tech E-Commerce
+#  ElectroniX  – Smart & Dynamic Tech E-Commerce
 
 > **Theme:** Responsible Technology & Consumer Protection
 > **Project Type:** Academic Software Development Project (C# / .NET)
