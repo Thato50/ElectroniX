@@ -1,6 +1,6 @@
 #  ElectroniX  – Smart & Dynamic Tech E-Commerce
 
-> **Theme:** Responsible Technology & Consumer Protection
+> **Theme:** Responsible Technology & Consumer Protection <br>
 > **Project Type:** Academic Software Development Project (C# / .NET)
 
 ## 🧠 Overview
