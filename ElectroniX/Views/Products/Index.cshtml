@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ElectroniX.Models.Products>
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h1>Products</h1>
+
+<form method="get">
+    <select name="usage">
+        <option value="">All Usage</option>
+        <option value="Study">Study</option>
+        <option value="Work">Work</option>
+        <option value="Gaming">Gaming</option>
+        <option value="Business">Business</option>
+    </select>
+
+    <select name="course">
+        <option value="">All Courses</option>
+        <option value="Engineering">Engineering</option>
+        <option value="Health">Health</option>
+        <option value="Business">Business</option>
+    </select>
+
+    <button type="submit">Filter</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Price</th>
+            <th>Grade</th>
+            <th>Stock</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.DeviceType</td>
+                <td>@item.Price.ToString("C")</td>
+                <td>@item.Grade</td>
+                <td>@item.Stock</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

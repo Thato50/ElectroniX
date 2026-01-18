@@ -1,0 +1,15 @@
+﻿@model ElectroniX.Models.Products
+
+<h1>@Model.Name</h1>
+<img src="@Model.ImageUrl" alt="@Model.Name" style="max-width:200px;" />
+<p>@Model.Description</p>
+<p>Price: @Model.Price.ToString("C")</p>
+<p>Device Type: @Model.DeviceType</p>
+<p>Grade: @Model.Grade</p>
+<p>Warranty: @Model.WarrantyMonths months</p>
+<p>Stock: @Model.Stock</p>
+<p>Recommended Usage: @Model.RecommendedUsage</p>
+@if (Model.RecommendedCourse != null)
+{
+    <p>Recommended Course: @Model.RecommendedCourse</p>
+}

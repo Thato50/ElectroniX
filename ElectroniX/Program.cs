@@ -1,10 +1,13 @@
 ﻿using ElectroniX.Data;
+using ElectroniX.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ========================
 // Database
+// ========================
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
@@ -13,20 +16,42 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+// ========================
 // Identity + Roles
+// ========================
 builder.Services
     .AddDefaultIdentity<IdentityUser>(options =>
     {
         options.SignIn.RequireConfirmedAccount = true;
     })
-    .AddRoles<IdentityRole>() // 👈 REQUIRED FOR ADMIN / USER
+    .AddRoles<IdentityRole>() // Required for Admin/User
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Pipeline
+// ========================
+// Seed Roles, Admin, Products
+// ========================
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        await DbInitializer.SeedAsync(services);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the database.");
+    }
+}
+
+// ========================
+// Middleware / Pipeline
+// ========================
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -42,18 +67,18 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//  MUST BE IN THIS ORDER
+// MUST BE IN THIS ORDER
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Redirect root to Login
+// Redirect root to Home page (instead of login)
 app.MapGet("/", context =>
 {
-    context.Response.Redirect("/Identity/Account/Login");
+    context.Response.Redirect("/Home/Index"); // 🔹 Home page first
     return Task.CompletedTask;
 });
 
-// MVC routes (still needed later)
+// MVC routes (for Products, Home, etc.)
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
